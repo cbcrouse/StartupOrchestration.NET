@@ -1,0 +1,36 @@
+name: .NET Build & Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "feature/*", "bugfix/*", "hotfix/*" ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 7.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore /m
+
+    - name: Test
+      run: >-
+        dotnet test
+        --no-build
+        --verbosity normal
+        --logger trx
+        --collect:"XPlat Code Coverage"
+        -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
