@@ -9,7 +9,6 @@ on:
 jobs:
   increment-version:
     runs-on: windows-latest
-
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -41,3 +40,27 @@ jobs:
     - name: Increment Version
       run: |
         dotnet-version increment-version-with-git-hints -g "." --branch-name ${{ github.ref_name }} --author-email ${{ vars.COMMIT_SIGNING_EMAIL }}
+
+  publish-nuget:
+    needs: increment-version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '7.x'
+
+      - name: Restore NuGet packages
+        run: dotnet restore src/StartupOrchestration.NET/StartupOrchestration.NET.csproj
+
+      - name: Pack project
+        run: dotnet pack src/StartupOrchestration.NET/StartupOrchestration.NET.csproj --configuration Release --no-restore /m
+
+      - name: Publish
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          NUGET_SOURCE: https://api.nuget.org/v3/index.json
+        run: dotnet nuget push "src/StartupOrchestration.NET/bin/Release/*.nupkg" --skip-duplicate --api-key $NUGET_API_KEY --source $NUGET_SOURCE
