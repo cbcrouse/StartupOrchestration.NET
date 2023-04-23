@@ -13,5 +13,10 @@ namespace StartupOrchestration.NET.UnitTests.TestClasses
         {
             // Do nothing
         }
+
+        public static void ThrowInvalidOperationException(this IServiceCollection services)
+        {
+            throw new InvalidOperationException();
+        }
     }
 }
