@@ -2,10 +2,8 @@ name: .NET Build & Test
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ "feature/*", "bugfix/*", "hotfix/*" ]
   pull_request:
-    branches: [ main ]
+    types: [opened, synchronize, reopened]
 
 jobs:
   build:
