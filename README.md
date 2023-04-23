@@ -1,5 +1,7 @@
 # StartupOrchestration.NET
 
+[![Main Status](https://github.com/cbcrouse/StartupOrchestration.NET/actions/workflows/dotnet.main.status.yml/badge.svg)](https://github.com/cbcrouse/StartupOrchestration.NET/actions/workflows/dotnet.main.status.yml) [![NuGet Downloads](https://img.shields.io/nuget/dt/StartupOrchestration.NET)](https://www.nuget.org/stats/packages/StartupOrchestration.NET?groupby=Version) [![NuGet Version](https://img.shields.io/nuget/v/StartupOrchestration.NET)](https://www.nuget.org/packages/StartupOrchestration.NET) [![codecov](https://codecov.io/gh/cbcrouse/StartupOrchestration.NET/branch/main/graph/badge.svg?token=XVPL3HNHDG)](https://codecov.io/gh/cbcrouse/StartupOrchestration.NET) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cbcrouse_StartupOrchestration.NET&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=cbcrouse_StartupOrchestration.NET)
+
 StartupOrchestration.NET is a .NET library that provides an interface for orchestrating dependency registrations in a way that is agnostic to the presentation layer. It allows for the separation of concerns between the presentation layer and the application layer by providing a way for the application layer to manage service registrations without any presentation-specific dependencies.
 
 ## Features
