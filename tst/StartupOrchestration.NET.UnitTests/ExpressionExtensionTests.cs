@@ -1,6 +1,6 @@
-using StartupOrchestration.NET.UnitTests.TestClasses;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StartupOrchestration.NET.UnitTests.TestClasses;
 
 namespace StartupOrchestration.NET.UnitTests;
 
@@ -45,6 +45,3 @@ public class ServiceRegistrationTests
         Assert.Null(exception3);
     }
 }
-
-public interface IService { }
-public class Service : IService { }

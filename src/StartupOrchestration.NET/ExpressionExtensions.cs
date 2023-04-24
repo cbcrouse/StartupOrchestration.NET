@@ -1,9 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System.Linq.Expressions;
-using System.Reflection;
-
-namespace StartupOrchestration.NET
+﻿namespace StartupOrchestration.NET
 {
     /// <summary>
     /// Provides extension methods for working with <see cref="Expression"/> objects.
@@ -35,7 +30,7 @@ namespace StartupOrchestration.NET
                    typeof(IServiceCollection).IsAssignableFrom(methodCallExpression.Method.GetParameters()[0].ParameterType);
         }
 
-        public static bool IsExtensionMethod(this MethodInfo methodInfo)
+        private static bool IsExtensionMethod(this MethodInfo methodInfo)
         {
             return methodInfo.IsDefined(typeof(System.Runtime.CompilerServices.ExtensionAttribute), false);
         }

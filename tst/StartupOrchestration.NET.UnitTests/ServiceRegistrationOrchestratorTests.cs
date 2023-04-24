@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using StartupOrchestration.NET.UnitTests.TestClasses;
 
 namespace StartupOrchestration.NET.UnitTests;
@@ -101,29 +100,8 @@ public class ServiceRegistrationOrchestratorTests
         orchestrator.GetLogger().Verify(logger => logger.Log(
             LogLevel.Trace,
             It.IsAny<EventId>(),
-            It.Is<It.IsAnyType>((o, t) => o.ToString().Contains(expectedFailureMessage)),
+            It.Is<It.IsAnyType>((o, t) => o.ToString()!.Contains(expectedFailureMessage)),
             It.IsAny<Exception>(),
             It.IsAny<Func<It.IsAnyType, Exception, string>>()!), Times.Once);
-    }
-}
-
-public interface ITestCoreService { }
-
-public class TestCoreService : ITestCoreService { }
-
-public class TestServiceRegistrationOrchestrator : ServiceRegistrationOrchestrator
-{
-    protected override ILogger StartupLogger => NullLogger.Instance;
-}
-
-public class TestServiceRegistrationOrchestratorWithLogger : ServiceRegistrationOrchestrator
-{
-    private readonly Mock<ILogger> _mockLogger = new();
-
-    protected override ILogger StartupLogger => _mockLogger.Object;
-
-    public Mock<ILogger> GetLogger()
-    {
-        return _mockLogger;
     }
 }
