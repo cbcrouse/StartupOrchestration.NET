@@ -1,6 +1,8 @@
 {
     "cSpell.words": [
         "appsettings",
-        "inheritdoc"
+        "inheritdoc",
+        "Serilog",
+        "typeof"
     ]
 }
