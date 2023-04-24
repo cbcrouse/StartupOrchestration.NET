@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using StartupOrchestration.NET.UnitTests.TestClasses;
 
 namespace StartupOrchestration.NET.UnitTests;
 
@@ -70,37 +71,5 @@ public class StartupOrchestratorTests
         // Act & Assert
         var ex = Assert.Throws<ArgumentException>(() => orchestrator.ConfigureServices(new ServiceCollection()));
         Assert.Contains("Only extension methods declared on IServiceCollection are allowed as service registration expressions.", ex.Message);
-    }
-}
-
-internal class TestCoreServiceRegistrationOrchestrator : ServiceRegistrationOrchestrator
-{
-    protected override ILogger StartupLogger => NullLogger.Instance;
-
-    public TestCoreServiceRegistrationOrchestrator()
-    {
-        ServiceRegistrationExpressions.Add((x, y) => x.AddScoped<ITestCoreService, TestCoreService>());
-    }
-}
-
-public interface ITestPresentationService { }
-
-public class TestPresentationService : ITestPresentationService { }
-
-internal class TestStartupOrchestrator : StartupOrchestrator<TestCoreServiceRegistrationOrchestrator>
-{
-    protected override void AddConfigurationProviders(IConfigurationBuilder builder)
-    {
-        builder.AddInMemoryCollection(new Dictionary<string, string>
-        {
-            { "BasePath", "test" }
-        }!);
-    }
-
-    protected override IConfigurationBuilder DefaultConfigurationBuilder { get; set; } = new ConfigurationBuilder();
-
-    public void CreateConfigurationBuilder(IConfigurationBuilder builder)
-    {
-        DefaultConfigurationBuilder = builder;
     }
 }

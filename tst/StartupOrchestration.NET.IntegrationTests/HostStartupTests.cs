@@ -1,8 +1,8 @@
-﻿using StartupOrchestration.NET.IntegrationTests.TestClasses;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using StartupOrchestration.NET.IntegrationTests.TestClasses;
 
 namespace StartupOrchestration.NET.IntegrationTests;
 

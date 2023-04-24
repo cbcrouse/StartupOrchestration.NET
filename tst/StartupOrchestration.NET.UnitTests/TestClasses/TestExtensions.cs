@@ -3,18 +3,18 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace StartupOrchestration.NET.UnitTests.TestClasses
 {
-    public static class TestExtensions
+    internal static class TestExtensions
     {
-        public static void ServiceCollectionExtension(this IServiceCollection services)
+        internal static void ServiceCollectionExtension(this IServiceCollection services)
         {
             // Do nothing
         }
-        public static void ConfigurationExtension(this IConfiguration config)
+        internal static void ConfigurationExtension(this IConfiguration config)
         {
             // Do nothing
         }
 
-        public static void ThrowInvalidOperationException(this IServiceCollection services)
+        internal static void ThrowInvalidOperationException(this IServiceCollection services)
         {
             throw new InvalidOperationException();
         }

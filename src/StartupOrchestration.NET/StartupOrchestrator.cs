@@ -21,8 +21,6 @@
     /// <typeparam name="TOrchestrator">The type of the <see cref="ServiceRegistrationOrchestrator"/> to be used.</typeparam>
     public abstract class StartupOrchestrator<TOrchestrator> where TOrchestrator : ServiceRegistrationOrchestrator, new()
     {
-        private TOrchestrator _serviceRegistrationOrchestrator = null!;
-
         /// <summary>
         /// This property is a list of expressions that define service registrations to be added to the DI container during
         /// startup. Each expression is intended to be a call to the AddTransient, AddScoped, or AddSingleton method of the
@@ -48,11 +46,11 @@
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
             IConfigurationRoot configuration = SetupConfiguration();
-            _serviceRegistrationOrchestrator = new TOrchestrator();
-            _serviceRegistrationOrchestrator.InitializeConfiguration(configuration);
-            _serviceRegistrationOrchestrator.InitializeServiceCollection(serviceCollection);
-            _serviceRegistrationOrchestrator.ServiceRegistrationExpressions.AddRange(ServiceRegistrationExpressions);
-            _serviceRegistrationOrchestrator.Orchestrate();
+            var orchestrator = new TOrchestrator();
+            orchestrator.InitializeConfiguration(configuration);
+            orchestrator.InitializeServiceCollection(serviceCollection);
+            orchestrator.ServiceRegistrationExpressions.AddRange(ServiceRegistrationExpressions);
+            orchestrator.Orchestrate();
         }
 
         /// <summary>
@@ -88,7 +86,7 @@
         /// <param name="builder">The configuration builder to set the base path for.</param>
         protected virtual void SetBasePath(IConfigurationBuilder builder)
         {
-            string assemblyLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string assemblyLocation = Assembly.GetExecutingAssembly().Location;
             string path = Directory.GetParent(assemblyLocation)!.FullName;
             builder.SetBasePath(path);
         }

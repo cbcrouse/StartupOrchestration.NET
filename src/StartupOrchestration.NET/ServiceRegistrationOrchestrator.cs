@@ -76,7 +76,7 @@
                 }
                 catch (Exception e)
                 {
-                    StartupLogger.LogTrace(e, "'{Expression}' failed with an unhandled exception.", expression.Body.ToString());
+                    StartupLogger.LogTrace(e, "'{Expression}' failed with an unhandled exception.", expressionAsString);
                     throw;
                 }
             }
