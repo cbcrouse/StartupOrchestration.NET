@@ -10,7 +10,7 @@
     <IsPackable>true</IsPackable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageId>StartupOrchestration.NET</PackageId>
-    <VersionPrefix>0.0.6</VersionPrefix>
+    <VersionPrefix>1.0.0</VersionPrefix>
     <Authors>Casey Crouse</Authors>
     <Company>NGEXDEV, LLC</Company>
     <Description>A .NET library that provides flexible startup orchestration for dependency injection in multiple presentation layer types. Includes a base class for implementing service registration logic and a presentation orchestrator class for initializing the service collection and configuration instances.</Description>
