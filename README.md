@@ -2,13 +2,13 @@
 
 [![Main Status](https://github.com/cbcrouse/StartupOrchestration.NET/actions/workflows/dotnet.main.status.yml/badge.svg)](https://github.com/cbcrouse/StartupOrchestration.NET/actions/workflows/dotnet.main.status.yml) [![NuGet Downloads](https://img.shields.io/nuget/dt/StartupOrchestration.NET)](https://www.nuget.org/stats/packages/StartupOrchestration.NET?groupby=Version) [![NuGet Version](https://img.shields.io/nuget/v/StartupOrchestration.NET)](https://www.nuget.org/packages/StartupOrchestration.NET) [![codecov](https://codecov.io/gh/cbcrouse/StartupOrchestration.NET/branch/main/graph/badge.svg?token=XVPL3HNHDG)](https://codecov.io/gh/cbcrouse/StartupOrchestration.NET) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cbcrouse_StartupOrchestration.NET&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=cbcrouse_StartupOrchestration.NET)
 
-## Overview
+## 🔍 Overview
 
 StartupOrchestration.NET is a powerful tool for .NET developers that want to write clean, organized and easily-maintainable code. With its use, developers can separate the presentation layer from the application layer, providing a flexible and extensible way to register services. Additionally, the library's built-in support for startup logging provides an easy way to diagnose and troubleshoot any registration issues during application startup. With StartupOrchestration.NET, developers can focus on the business logic of their applications, without having to worry about the details of service registration. Overall, if you want to write high-quality .NET code, StartupOrchestration.NET is a must-have tool.
 
 ---
 
-## Features
+## ✅ Features
 
 - Enables the application layer to manage service registrations independently of the presentation layer, allowing for a more modular and maintainable codebase.
 - Facilitates separation of concerns between the presentation and application layers, preventing any presentation-specific dependencies from creeping into the application layer.
@@ -20,7 +20,17 @@ StartupOrchestration.NET is a powerful tool for .NET developers that want to wri
 
 ---
 
-## Installation
+## 👤 Audience
+
+This library is aimed at developers who are building applications that may grow in size and complexity over time. If you're working on a small, simple application that you don't anticipate growing much, StartupOrchestration&#46;NET may not be necessary for your project.
+
+However, if you're building a more ambitious application or multiple applications that share common services, StartupOrchestration&#46;NET can be a valuable tool for streamlining the initialization and configuration of your application's dependencies and services. This library helps you reduce boilerplate code and makes it easier to maintain your application's dependencies as it grows.
+
+In addition, this library is designed specifically for .NET applications, taking advantage of the unique features and capabilities of the .NET framework. This makes it an ideal choice for .NET developers who want to simplify the development process and ensure that their applications are built to last.
+
+---
+
+## 📦 Getting Started
 
 You can install the package via NuGet. Search for `StartupOrchestration.NET` or run the following command:
 
@@ -30,12 +40,11 @@ dotnet add package StartupOrchestration.NET
 
 ---
 
-## Usage
+## 🧑‍💻 Usage
 
 Here's an example of how the `ServiceRegistrationOrchestrator` and `StartupOrchestrator` classes might be used in a .NET solution following a clean architecture structure:
 
-> [!NOTE]
-> A clean architecture structure is not required to use StartupOrchestration.NET. It is simply an example of how the library can be used in a real-world application.
+> NOTE: A clean architecture structure is not required to use StartupOrchestration.NET. It is simply an example of how the library can be used in a real-world application.
 
 ```css
 MyProject/
@@ -43,50 +52,29 @@ MyProject/
 │  ├─ Application/
 │  │  └─ MyApp/
 │  │     ├─ MyApp.csproj
-│  │     ├─ Services/
-│  │     │  ├─ Interfaces/
-│  │     │  │  └─ IMyService.cs
-│  │     │  └─ Implementations/
-│  │     │     └─ MyService.cs
-│  │     ├─ MyApp.Application.csproj
 │  │     └─ ...
 │  ├─ Infrastructure/
 │  │  ├─ Startup/
 │  │  │  └─ AppStartupOrchestrator.cs
 │  │  ├─ Persistence/
-│  │  │  ├─ Migrations/
 │  │  │  ├─ Repositories/
 │  │  │  │  └─ MyRepository.cs
 │  │  │  └─ MyAppDbContext.cs
-│  │  └─ Infrastructure.csproj
+│  │  └─ ...
 │  ├─ Presentation/
 │  │  ├─ MyApp.API/
 │  │  │  ├─ MyApp.API.csproj
-│  │  │  ├─ Controllers/
-│  │  │  │  └─ MyController.cs
-│  │  │  ├─ Program.cs
 │  │  │  ├─ WebApiStartup.cs
 │  │  │  └─ ...
-│  │  └─ MyApp.API.csproj
-│  ├─ Presentation/
 │  │  ├─ MyApp.Console/
 │  │  │  ├─ MyApp.Console.csproj
-│  │  │  ├─ Commands/
-│  │  │  │  └─ MyCommand.cs
-│  │  │  ├─ Program.cs
-│  │  │  ├─ Startup.cs
+│  │  │  ├─ ConsoleStartup.cs
 │  │  │  └─ ...
-│  │  └─ MyApp.Console.csproj
-│  ├─ Presentation/
 │  │  ├─ MyApp.AzureFunction/
 │  │  │  ├─ MyApp.AzureFunction.csproj
-│  │  │  ├─ Functions/
-│  │  │  │  └─ MyFunction.cs
-│  │  │  ├─ Program.cs
-│  │  │  ├─ Startup.cs
+│  │  │  ├─ FunctionStartup.cs
 │  │  │  └─ ...
-│  │  └─ MyApp.AzureFunction.csproj
-│  └─ MyProject.sln
+│  │  └─ ...
 └─ tests/
    ├─ MyApp.UnitTests/
    │  ├─ MyApp.UnitTests.csproj
@@ -155,14 +143,13 @@ Here, `AppStartupOrchestrator` is the implementation of `ServiceRegistrationOrch
 
 In this example, `AppStartupOrchestrator` inherits from `ServiceRegistrationOrchestrator` and registers the required services for the Application layer. `WebApiStartup` inherits from `StartupOrchestrator<AppStartupOrchestrator>` and uses the `ServiceRegistrationOrchestrator` in the Application layer to register its own required services.
 
-By doing this, the Application layer becomes independent of any specific presentation layer, allowing for flexibility in creating multiple presentation layers to suit different use cases or to change the presentation layer without affecting the core application logic.
+By doing this, the Application layer becomes independent of any specific presentation layer, allowing for flexibility in creating multiple presentation layers to suit different use cases or to change the presentation layer without affecting the core application logic or it's dependencies.
 
-> [!TIP]
-> You can see how this library is implemented in <https://github.com/cbcrouse/CleanArchitecture> using more complex registrations like AutoMapper.
+> TIP: You can see how this library is implemented in <https://github.com/cbcrouse/CleanArchitecture> using more complex registrations like AutoMapper.
 
 ---
 
-## ServiceRegistrationOrchestrator and StartupOrchestrator
+## 🔌 ServiceRegistrationOrchestrator and StartupOrchestrator
 
 The `ServiceRegistrationOrchestrator` class is the main class that is used to manage the service registration process. It provides a way for developers to define and manage the service registration expressions that are used by the Dependency Injection (DI) container to instantiate the services used by the application. The `ServiceRegistrationOrchestrator` class is abstract and must be inherited by the application layer to implement its own registration expressions.
 
@@ -172,17 +159,17 @@ Both classes are important in enabling the separation of concerns between the ap
 
 ---
 
-## The Use of Expressions
+## 📄 The Use of Expressions
 
-In `ServiceRegistrationOrchestrator`, each expression in the `ServiceRegistrationExpressions` collection is a delegate that is executed during the `Orchestrate` method call. These expressions are used to register services with the dependency injection container. The benefit of using expressions instead of functions is that the expressions can be evaluated lazily. This means that the expressions are not executed until they are needed, which can improve the performance of the startup process.
+In `ServiceRegistrationOrchestrator`, each expression in the `ServiceRegistrationExpressions` collection is a delegate that is executed during the `Orchestrate` method call. These expressions are used to register services with the dependency injection container. The benefit of using expressions instead of functions is that the expressions can be evaluated lazily. This means that the expressions are not executed until they are needed, which can improve the performance of the startup process and also avoid timing issues that arise from attempting to register services in various parts of the application.
 
 Additionally, the expressions provide a way to perform dynamic logging of the expression body. This can be useful for debugging the startup process, as it allows developers to see exactly which expressions are being executed, and in what order.
 
-Each expression takes in two parameters: IServiceCollection and IConfiguration. IServiceCollection is a collection of service descriptors, which are used to register services with the .NET dependency injection container. IConfiguration is the configuration for the application. By using expressions, the application layer can add services to the collection independently of the presentation layer.
+Each expression takes in two parameters: `IServiceCollection` and `IConfiguration`. The IServiceCollection is a collection of service descriptors that is used to register services with the .NET dependency injection container. The IConfiguration is the configuration for the application. The values for these parameters are typically passed down from the presentation layer through the Startup class. By using expressions, the application layer can add services to the collection independently of the presentation layer, allowing for a more modular and organized approach to managing dependencies and configuration.
 
 ### Startup Logging
 
-The `StartupLogger` property is used to provide a way to log startup events. Logging is an important part of any application, and startup logging is especially useful as it can provide insight into the order in which services are initialized.
+The `StartupLogger` property is used to provide a way to log startup events before the application's logger is available. Logging is an important part of any application, and startup logging is especially useful as it can provide insight into the order in which services are initialized.
 
 Using a logging framework like Serilog, you can log startup events to a file or a database for later analysis. This can be useful in identifying startup bottlenecks, dependencies that are failing to initialize, and more. Additionally, startup logging can provide context for debugging, as you can see the order in which services are being registered and identify any potential issues early on.
 
@@ -209,7 +196,7 @@ Using a logging framework like Serilog, you can log startup events to a file or 
 
 ---
 
-## Writing Valid Service Registration Expressions
+## ✔ Writing Valid Service Registration Expressions
 
 Each expression added to the `ServiceRegistrationExpressions` collection is validated before it is executed. The validation ensures that the expression is a valid extension method declared on `IServiceCollection`. This validation helps prevent runtime errors caused by incorrectly defined registration expressions. Here's some examples of a valid expressions:
 
