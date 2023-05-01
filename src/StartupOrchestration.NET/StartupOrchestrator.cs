@@ -47,10 +47,8 @@
         {
             IConfigurationRoot configuration = SetupConfiguration();
             var orchestrator = new TOrchestrator();
-            orchestrator.InitializeConfiguration(configuration);
-            orchestrator.InitializeServiceCollection(serviceCollection);
             orchestrator.ServiceRegistrationExpressions.AddRange(ServiceRegistrationExpressions);
-            orchestrator.Orchestrate();
+            orchestrator.Orchestrate(serviceCollection, configuration);
         }
 
         /// <summary>
