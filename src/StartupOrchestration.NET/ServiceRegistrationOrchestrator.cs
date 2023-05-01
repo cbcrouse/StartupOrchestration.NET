@@ -11,9 +11,6 @@
     /// </summary>
     public abstract class ServiceRegistrationOrchestrator
     {
-        private IServiceCollection _serviceCollection = null!;
-        private IConfiguration _configuration = null!;
-
         /// <summary>
         /// This property is a list of expressions that define service registrations to be added to the DI container during
         /// startup. Each expression is intended to be a call to the AddTransient, AddScoped, or AddSingleton method of the
@@ -29,38 +26,16 @@
         protected abstract ILogger StartupLogger { get; }
 
         /// <summary>
-        /// This function is used to pass the <see cref="IServiceCollection"/> from the presentation layer to the
-        /// application layer. This allows the application to take control of service registrations.
-        /// </summary>
-        /// <param name="collection">A collection of service descriptors that specifies the contracts and implementations
-        /// for the services that will be registered by the application.</param>
-        public void InitializeServiceCollection(IServiceCollection collection)
-        {
-            _serviceCollection = collection;
-        }
-
-        /// <summary>
-        /// This function allows the presentation layer to send the <see cref="IConfiguration"/>
-        /// down to the application layer. This allows the application to load configurations,
-        /// independent of the presentation.
-        /// </summary>
-        /// <param name="configuration">Represents a set of key/value application configuration properties.</param>
-        public void InitializeConfiguration(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
-        /// <summary>
         /// This method is the main entry point for the orchestration of dependency registrations.
-        /// It leverages the service collection object that was previously set up through the
-        /// <see cref="InitializeServiceCollection"/> methods respectively, to register all the
-        /// services and dependencies needed for the application. The registrations are based on
-        /// the list of <see cref="Expression{Action}"/> objects in the
-        /// <see cref="ServiceRegistrationExpressions"/> collection, which specify the service
-        /// registrations to be performed. This method logs each registration as it happens using
-        /// the expression body with the <see cref="StartupLogger"/> property.
+        /// It uses the provided <paramref name="serviceCollection"/> to register all the services and dependencies needed for the application.
+        /// The registrations are based on a list of <see cref="Expression{Action}"/> objects in the
+        /// <see cref="ServiceRegistrationExpressions"/> collection, which specify the service registrations to be performed.
+        /// This method logs each registration as it happens using the expression body with the <see cref="StartupLogger"/> property.
+        /// The <paramref name="configuration"/> parameter is used to supply configuration values to the application.
         /// </summary>
-        public void Orchestrate()
+        /// <param name="serviceCollection">The <see cref="IServiceCollection"/> instance to use for registering services.</param>
+        /// <param name="configuration">The <see cref="IConfiguration"/> instance to use for supplying configuration values to the application.</param>
+        public void Orchestrate(IServiceCollection serviceCollection, IConfiguration configuration)
         {
             ServiceRegistrationExpressions.ForEach(x => x.ValidateServiceRegistration());
 
@@ -71,7 +46,7 @@
                 try
                 {
                     StartupLogger.LogTrace("'{Expression}' was started...", expressionAsString);
-                    expression.Compile().Invoke(_serviceCollection, _configuration);
+                    expression.Compile().Invoke(serviceCollection, configuration);
                     StartupLogger.LogTrace("'{Expression}' completed successfully!", expressionAsString);
                 }
                 catch (Exception e)
