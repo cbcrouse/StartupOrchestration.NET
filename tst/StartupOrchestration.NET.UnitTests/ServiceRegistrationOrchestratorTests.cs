@@ -60,8 +60,8 @@ public class ServiceRegistrationOrchestratorTests
         var orchestrator = new TestServiceRegistrationOrchestratorWithLogger();
         Expression<Action<IServiceCollection, IConfiguration>> expression = (x, y) => x.AddScoped<ITestCoreService, TestCoreService>();
         orchestrator.ServiceRegistrationExpressions.Add(expression);
-        var expectedStartedMessage = $"'{expression.Body}' was started...";
-        var expectedCompletedMessage = $"'{expression.Body}' completed successfully!";
+        var expectedStartedMessage = "'AddScoped<ITestCoreService, TestCoreService>(this IServiceCollection)' was started...";
+        var expectedCompletedMessage = "'AddScoped<ITestCoreService, TestCoreService>(this IServiceCollection)' completed successfully!";
 
         // Act
         using var scope = new StringWriter();
@@ -93,7 +93,7 @@ public class ServiceRegistrationOrchestratorTests
         var orchestrator = new TestServiceRegistrationOrchestratorWithLogger();
         Expression<Action<IServiceCollection, IConfiguration>> expression = (x, y) => x.ThrowInvalidOperationException();
         orchestrator.ServiceRegistrationExpressions.Add(expression);
-        var expectedFailureMessage = $"'{expression.Body}' failed with an unhandled exception.";
+        var expectedFailureMessage = "'ThrowInvalidOperationException(this IServiceCollection)' failed with an unhandled exception.";
 
         // Act
         using var scope = new StringWriter();
@@ -105,6 +105,136 @@ public class ServiceRegistrationOrchestratorTests
             LogLevel.Trace,
             It.IsAny<EventId>(),
             It.Is<It.IsAnyType>((o, t) => o.ToString()!.Contains(expectedFailureMessage)),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception, string>>()!), Times.Once);
+    }
+
+    [Fact]
+    public void Orchestrate_LogsServiceRegistration_WithNoParameters()
+    {
+        // Arrange
+        var serviceCollection = new ServiceCollection();
+        var configuration = new ConfigurationBuilder().Build();
+        var orchestrator = new TestServiceRegistrationOrchestratorWithLogger();
+        Expression<Action<IServiceCollection, IConfiguration>> expression = (x, y) => x.AddService();
+        orchestrator.ServiceRegistrationExpressions.Add(expression);
+        var expectedStartedMessage = "'AddService(this IServiceCollection)' was started...";
+        var expectedCompletedMessage = "'AddService(this IServiceCollection)' completed successfully!";
+
+        // Act
+        orchestrator.Orchestrate(serviceCollection, configuration);
+
+        // Assert
+        orchestrator.GetLogger().Verify(logger => logger.Log(
+            LogLevel.Trace,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((o, t) => o.ToString()!.Contains(expectedStartedMessage)),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception, string>>()!), Times.Once);
+
+        orchestrator.GetLogger().Verify(logger => logger.Log(
+            LogLevel.Trace,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((o, t) => o.ToString()!.Contains(expectedCompletedMessage)),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception, string>>()!), Times.Once);
+    }
+
+    [Fact]
+    public void Orchestrate_LogsServiceRegistration_WithGenericParameters()
+    {
+        // Arrange
+        var serviceCollection = new ServiceCollection();
+        var configuration = new ConfigurationBuilder().Build();
+        var orchestrator = new TestServiceRegistrationOrchestratorWithLogger();
+        Expression<Action<IServiceCollection, IConfiguration>> expression = (x, y) => x.AddScoped<ITestCoreService, TestCoreService>();
+        orchestrator.ServiceRegistrationExpressions.Add(expression);
+        var expectedStartedMessage = "'AddScoped<ITestCoreService, TestCoreService>(this IServiceCollection)' was started...";
+        var expectedCompletedMessage = "'AddScoped<ITestCoreService, TestCoreService>(this IServiceCollection)' completed successfully!";
+
+        // Act
+        orchestrator.Orchestrate(serviceCollection, configuration);
+
+        // Assert
+        orchestrator.GetLogger().Verify(logger => logger.Log(
+            LogLevel.Trace,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((o, t) => o.ToString()!.Contains(expectedStartedMessage)),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception, string>>()!), Times.Once);
+
+        orchestrator.GetLogger().Verify(logger => logger.Log(
+            LogLevel.Trace,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((o, t) => o.ToString()!.Contains(expectedCompletedMessage)),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception, string>>()!), Times.Once);
+    }
+
+    [Fact]
+    public void Orchestrate_LogsServiceRegistration_WithNormalParameters()
+    {
+        // Arrange
+        var serviceCollection = new ServiceCollection();
+        var configuration = new ConfigurationBuilder().Build();
+        var orchestrator = new TestServiceRegistrationOrchestratorWithLogger();
+        Expression<Action<IServiceCollection, IConfiguration>> expression = (x, y) => x.AddScoped(typeof(ITestCoreService), typeof(TestCoreService));
+        orchestrator.ServiceRegistrationExpressions.Add(expression);
+        var expectedStartedMessage = "'AddScoped(this IServiceCollection, Type<StartupOrchestration.NET.UnitTests.TestClasses.ITestCoreService>, Type<StartupOrchestration.NET.UnitTests.TestClasses.TestCoreService>)' was started...";
+        var expectedCompletedMessage = "'AddScoped(this IServiceCollection, Type<StartupOrchestration.NET.UnitTests.TestClasses.ITestCoreService>, Type<StartupOrchestration.NET.UnitTests.TestClasses.TestCoreService>)' completed successfully!";
+
+        // Act
+        orchestrator.Orchestrate(serviceCollection, configuration);
+
+        // Assert
+        orchestrator.GetLogger().Verify(logger => logger.Log(
+            LogLevel.Trace,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((o, t) => o.ToString()!.Contains(expectedStartedMessage)),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception, string>>()!), Times.Once);
+
+        orchestrator.GetLogger().Verify(logger => logger.Log(
+            LogLevel.Trace,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((o, t) => o.ToString()!.Contains(expectedCompletedMessage)),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception, string>>()!), Times.Once);
+    }
+
+    [Fact]
+    public void Orchestrate_LogsServiceRegistration_WithLambdaExpression()
+    {
+        // Arrange
+        var serviceCollection = new ServiceCollection();
+        var configuration = new ConfigurationBuilder().Build();
+        var orchestrator = new TestServiceRegistrationOrchestratorWithLogger();
+
+        // Lambda expression: AddScoped<ITestCoreService>(services => new TestCoreService())
+        Expression<Action<IServiceCollection, IConfiguration>> expression = (x, y) => x.AddScoped<ITestCoreService>(services => new TestCoreService());
+        orchestrator.ServiceRegistrationExpressions.Add(expression);
+
+        // Expected messages for logging
+        var expectedStartedMessage = "'AddScoped<ITestCoreService>(this IServiceCollection, (IServiceProvider) => new TestCoreService())' was started...";
+        var expectedCompletedMessage = "'AddScoped<ITestCoreService>(this IServiceCollection, (IServiceProvider) => new TestCoreService())' completed successfully!";
+
+        // Act
+        orchestrator.Orchestrate(serviceCollection, configuration);
+
+        // Assert
+        // Verify that the logger logged the "started" message with the lambda expression details
+        orchestrator.GetLogger().Verify(logger => logger.Log(
+            LogLevel.Trace,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((o, t) => o.ToString()!.Contains(expectedStartedMessage)),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception, string>>()!), Times.Once);
+
+        // Verify that the logger logged the "completed" message with the lambda expression details
+        orchestrator.GetLogger().Verify(logger => logger.Log(
+            LogLevel.Trace,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((o, t) => o.ToString()!.Contains(expectedCompletedMessage)),
             It.IsAny<Exception>(),
             It.IsAny<Func<It.IsAnyType, Exception, string>>()!), Times.Once);
     }
